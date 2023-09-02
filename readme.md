@@ -62,3 +62,12 @@ but now we will comment the mongo and check api request of web is working or not
   work fine...
 
 step 10 : checkout on second-step branch for communicate with mongodb db
+
+to solve mongo dv localhost issue
+mongodb://localhost:27017/swfavorites change it to like
+mongodb://host.docker.internal:27017/swfavorites
+
+now run the post request and check the localhost db in mongo
+
+That end.
+
