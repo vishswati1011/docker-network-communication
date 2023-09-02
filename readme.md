@@ -71,3 +71,48 @@ now run the post request and check the localhost db in mongo
 
 That end.
 
+communicating with container to container 
+nodejs to mongo db container 
+
+to run the mongodb container we will use docker mongodb image
+and cmd to run conatiner
+$ docker run -d --name mongodb mongo 
+now connect this mongodb container to nodejs conatiner
+run inspect command and copu the IPAddress of mongodb container from networksetting and use it in place of "host.docker.internal" in mongodb url
+Ex: 
+mongodb://host.docker.internal:27017/swfavorites 
+mongodb://172.17.0.3:27017/swfavorites
+
+
+$ docker container inspect mongodb  
+ now again the build image and run the container and run the api calls but you will and post api works and get also which will return the data which is just now saved  
+ get request localhost:3000/favorites
+ because the data is saved in mongodb conatiner not in mongodb localhost
+
+ but there is one issue every time we need add build image if the mongodb container ip will changes
+Docker Network : within a docker network, all container can communicate with each other and IPS are automcatically resolved
+
+First stop the running conatiner both node and mongo
+docker stop mognodb
+docker stop fav-node-c
+docker container prune
+
+now run the cmd
+now create the network first
+run docker network --help
+docker network create favorites-net
+docker network ls
+now run "mongodb" conatiner with mongo and "favorites-net" network image
+docker run -d --name mongodb --network favorites-net mongo
+do the changes in code 
+Ex 
+mongodb://172.17.0.3:27017/swfavorites
+mongodb://mongodb:27017/swfavorites
+
+create the new image and run node js container with same network
+$ docker build -t fav-node .
+$ docker run --name fav-node-c --network favorites-net -d --rm -p 3000:3000 fav-node
+
+here we can see we have connect between container with network
+
+
